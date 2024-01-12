@@ -5,6 +5,7 @@ const main = document.querySelector(".main");
 const continueBtn = document.querySelector(".continue-btn");
 const quizSection = document.querySelector(".quiz-section");
 const quizBox = document.querySelector(".quiz-box");
+const resultBox = document.querySelector(".result-box");
 
 
 startBtn.onclick = () => {
@@ -23,9 +24,13 @@ continueBtn.onclick = () => {
     main.classList.remove("active");
     quizBox.classList.add("active");
     showQuestions(0);
+    questionCounter(1);
 };
 
 let questionCount = 0;
+let questionNumb = 1;
+let userScore = 0;
+
 const nextBtn = document.querySelector(".next-btn");
 
 
@@ -33,6 +38,13 @@ nextBtn.onclick = () => {
     if (questionCount < questions.length - 1) {
         questionCount++;
         showQuestions(questionCount);
+        questionNumb++;
+        questionCounter(questionNumb);
+        
+        nextBtn.classList.remove("active");
+    }else{
+        console.log("question completed");
+        showResultBox();
     }
 }
 
@@ -53,5 +65,51 @@ function showQuestions(index) {
     <div class="option"><span>${questions[index].options[3]}</span></div>`;
 
     optionList.innerHTML = optionTag;
+    const option = document.querySelectorAll('.option');
+    for (let i = 0; i < option.length; i++) {
+        option[i].setAttribute("onclick", 'optionSelected(this)');
+    }
 
+}
+
+function questionCounter(index) {
+    const questionTotal = document.querySelector('.question-total');
+    questionTotal.textContent = `${index} of ${questions.length} Questions`;
+}
+
+function optionSelected(answer) {
+    let userAnswer = answer.textContent;
+    let correctAnswer = questions[questionCount].answer;
+    let allOptions = optionList.children.length;
+    if (userAnswer == correctAnswer) {
+        //console.log("answer is correct");
+        answer.classList.add("correct");
+        userScore+=1;
+    } else {
+        answer.classList.add("incorrect");
+        //console.log("anwer is wrong");
+        for (let i = 0; i < allOptions; i++) {
+            if (optionList.children[i].textContent == correctAnswer) {
+                optionList.children[i].classList.add("correct");
+            }
+        }
+    }
+    headerScore();
+    //if user has selected, disabled all options
+    for (let i = 0; i < allOptions; i++) {
+        optionList.children[i].classList.add("disabled");
+    }
+    nextBtn.classList.add("active");
+}
+
+
+function headerScore(){
+    const headerScoreText=document.querySelector(".header-score");
+    headerScoreText.textContent=`Score: ${userScore} / ${questions.length} `;
+}
+
+
+function showResultBox(){
+    quizBox.classList.remove("active");
+    resultBox.classList.add("active");
 }
