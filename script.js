@@ -6,6 +6,8 @@ const continueBtn = document.querySelector(".continue-btn");
 const quizSection = document.querySelector(".quiz-section");
 const quizBox = document.querySelector(".quiz-box");
 const resultBox = document.querySelector(".result-box");
+const tryAgainBtn = document.querySelector(".tryAgain-btn");
+const goHomeBtn = document.querySelector(".goHome-btn");
 
 
 startBtn.onclick = () => {
@@ -27,6 +29,34 @@ continueBtn.onclick = () => {
     questionCounter(1);
 };
 
+
+tryAgainBtn.onclick = () => {
+    alert("asd");
+    quizBox.classList.add("active");
+    resultBox.classList.remove("active");
+    nextBtn.classList.remove("active");
+
+    questionCount = 0;
+    questionNumb = 1;
+    userScore = 0;
+    showQuestions(questionCount);
+    headerScore();
+}
+
+
+goHomeBtn.onclick = () => {
+    quizSection.classList.remove("active");
+    resultBox.classList.remove("active");
+    nextBtn.classList.remove("active");
+
+    questionCount = 0;
+    questionNumb = 1;
+    userScore = 0;
+    showQuestions(questionCount);
+    headerScore();
+}
+
+
 let questionCount = 0;
 let questionNumb = 1;
 let userScore = 0;
@@ -40,11 +70,12 @@ nextBtn.onclick = () => {
         showQuestions(questionCount);
         questionNumb++;
         questionCounter(questionNumb);
-        
         nextBtn.classList.remove("active");
-    }else{
+    } else {
         console.log("question completed");
-        showResultBox();
+        nextBtn.classList.remove("active");
+        quizBox.classList.remove("active");
+       showResultBox();
     }
 }
 
@@ -84,7 +115,7 @@ function optionSelected(answer) {
     if (userAnswer == correctAnswer) {
         //console.log("answer is correct");
         answer.classList.add("correct");
-        userScore+=1;
+        userScore += 1;
     } else {
         answer.classList.add("incorrect");
         //console.log("anwer is wrong");
@@ -103,13 +134,32 @@ function optionSelected(answer) {
 }
 
 
-function headerScore(){
-    const headerScoreText=document.querySelector(".header-score");
-    headerScoreText.textContent=`Score: ${userScore} / ${questions.length} `;
+function headerScore() {
+    const headerScoreText = document.querySelector(".header-score");
+    headerScoreText.textContent = `Score: ${userScore} / ${questions.length} `;
 }
 
 
-function showResultBox(){
-    quizBox.classList.remove("active");
+function showResultBox() {
+    
     resultBox.classList.add("active");
+
+    const scoreText = document.querySelector(".score-text");
+    scoreText.textContent = `Your Score ${userScore} out of ${questions.length}`;
+
+    const circularProgress = document.querySelector(".circular-progress");
+    const progressValue = document.querySelector(".progress-value");
+    let progressStartValue = 0;
+    let progressEndValue = (userScore / questions.length) * 100;
+    let speed = 20;
+
+    let progress = setInterval(() => {
+        progressStartValue++;
+        console.log(progressStartValue);
+        progressValue.textContent = `${progressStartValue}%`;
+        circularProgress.style.background = `conic-gradient(#c40094 ${progressStartValue * 3.6}deg, rgba(255, 255, 255, .1) 0deg)`;
+        if (progressStartValue == progressEndValue) {
+            clearInterval(progress);
+        }
+    }, speed);
 }

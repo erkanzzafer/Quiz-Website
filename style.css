@@ -368,7 +368,7 @@ body {
 .quiz-section .result-box.active {
 
     opacity: 1;
-    pointer-events: none;
+    pointer-events: auto;
     transform: translate(-50%, -50%) scale(1);
 
 }
@@ -440,20 +440,23 @@ body {
     margin: 0 20px 20px;
     cursor: pointer;
     transition: .5s;
-
 }
 
-.buttons button:nth-child(1):hover {
-    background: #950170;
-    border-color: #950170;
-}
 
-.buttons button:nth-child(2) {
-    background: transparent;
+.buttons .goHome-btn{
+    background: transparent ;
     color: #c40094;
 }
 
-.buttons button:nth-child(2):hover {
+
+
+.buttons .goHome-btn:hover{
     background: #c40094;
-    color: #fff
+    color: #fff;
+}
+
+
+.buttons .tryAgain-btn:hover{
+    background: #fff;
+    color: #c40094;
 }
